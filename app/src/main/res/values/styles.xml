@@ -1,0 +1,76 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="ConfirmDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:background">#00000000</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.6</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/anim_open_dialog</item>
+        <item name="android:windowExitAnimation">@anim/anim_open_dialog</item>
+    </style>
+
+    <style name="AppStyles" parent="AppTheme">
+
+        <item name="android:windowBackground">@color/color_bg_window</item>
+    </style>
+
+    <declare-styleable name="VoiceProgressBar">
+        <attr name="roundColor" format="color" />
+        <attr name="roundProgressColor" format="color" />
+        <attr name="progressBgColor" format="color" />
+        <attr name="roundWidth" format="dimension" />
+        <attr name="max" format="integer" />
+        <attr name="style">
+            <enum name="STROKE" value="0" />
+            <enum name="FILL" value="1" />
+        </attr>
+
+        <attr name="stateType">
+            <enum name="NONE" value="0" />
+            <enum name="START" value="1" />
+            <enum name="PAUSE" value="2" />
+            <enum name="LOADING" value="3" />
+            <enum name="UP_LOAD" value="4" />
+            <enum name="DOWN_LOAD" value="5" />
+        </attr>
+        <attr name="stateWidth" format="dimension" />
+        <attr name="stateHeight" format="dimension" />
+        <attr name="stateLineWidth" format="dimension" />
+        <attr name="stateColor" format="color" />
+        <attr name="upLoad" format="reference" />
+        <attr name="downLoad" format="reference" />
+        <attr name="pause" format="reference" />
+        <attr name="start" format="reference" />
+        <attr name="loading" format="reference" />
+
+    </declare-styleable>
+
+    <style name="mydialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="blueProgressBar" parent="Base.Widget.AppCompat.ProgressBar"/>
+
+
+</resources>
