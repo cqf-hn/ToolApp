@@ -124,7 +124,13 @@ public class FileActivity extends BaseActivity {
         //创建头部目录
         llFileContent.removeAllViews();
         addFileTitle(file);
-        adapter.setDataAndRefresh(Arrays.asList(file.listFiles()));
+        if(file.listFiles()==null) {
+            adapter.getData().clear();
+            adapter.getCheckData().clear();
+            adapter.notifyDataSetChanged();
+        } else {
+            adapter.setDataAndRefresh(Arrays.asList(file.listFiles()));
+        }
         BaseApplication.getInstance().post(new Runnable() {
             @Override
             public void run() {
