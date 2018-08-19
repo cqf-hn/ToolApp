@@ -22,7 +22,7 @@
 
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/anim_open_dialog</item>
-        <item name="android:windowExitAnimation">@anim/anim_open_dialog</item>
+        <item name="android:windowExitAnimation">@anim/anim_close_dialog</item>
     </style>
 
     <style name="AppStyles" parent="AppTheme">

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,12 @@ import com.cqf.hn.tool.R;
 import com.cqf.hn.tool.adapter.FileAdapter;
 import com.cqf.hn.tool.base.BaseActivity;
 import com.cqf.hn.tool.base.BaseApplication;
+import com.cqf.hn.tool.event.SelectFileEvent;
 import com.cqf.hn.tool.event.ShowNewFileEvent;
 import com.cqf.hn.tool.util.EventBusUtil;
 import com.cqf.hn.tool.util.FileUtils;
 import com.cqf.hn.tool.util.TDevice;
+import com.cqf.hn.tool.util.ToastUtil;
 import com.cqf.hn.tool.view.TitleView;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -86,38 +89,46 @@ public class FileActivity extends BaseActivity {
     @Override
     protected void onLayoutAfter() {
         super.onLayoutAfter();
+        titleView.setTitle("选择文件", true)
+                .setRightTxt("保存").setRightTxtClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (adapter.getCheckData().size() == 0) {
+                    ToastUtil.showToast("请选择文件");
+                } else {
+                    SelectFileEvent.getInstance().send(adapter.getCheckData());
+                    finish();
+                }
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(_activity));
         recyclerView.setPadding(0, 0, 0, 0);
         adapter = new FileAdapter(_activity);
         recyclerView.setAdapter(adapter);
-        renderUI(FileUtils.getExternalStorageDirectory(), true);
+        renderUI(FileUtils.getExternalStorageDirectory());
+        files.add(FileUtils.getExternalStorageDirectory());
     }
 
     @Override
     public void onBackPressed() {
         if (files.size() > 1) {
             files.remove(files.size() - 1);
-            renderUI(files.get(files.size() - 1), false);
+            renderUI(files.get(files.size() - 1));
             return;
         }
         super.onBackPressed();
 
     }
 
-    private void renderUI(File file, boolean isAddFile) {
+    private void renderUI(File file) {
         //创建头部目录
         llFileContent.removeAllViews();
         addFileTitle(file);
         adapter.setDataAndRefresh(Arrays.asList(file.listFiles()));
-        if (isAddFile) {
-            files.add(file);
-        } else {
-            files.remove(file);
-        }
         BaseApplication.getInstance().post(new Runnable() {
             @Override
             public void run() {
-                scrollView.fullScroll(HorizontalScrollView.FOCUS_DOWN);
+                scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
             }
         });
     }
@@ -134,9 +145,6 @@ public class FileActivity extends BaseActivity {
         llFileContent.addView(tv, 0);
         if (file.getParentFile() != null) {
             addFileTitle(file.getParentFile());
-        } else {
-            TextView root = createTextView(file);
-            llFileContent.addView(root, 0);
         }
     }
 
@@ -144,7 +152,11 @@ public class FileActivity extends BaseActivity {
     private TextView createTextView(File file) {
         final TextView tv = new TextView(_activity);
         tv.setTag(file);
-        tv.setText(file.getName());
+        if (file.getParentFile() == null && TextUtils.isEmpty(file.getName())) {
+            tv.setText("/");
+        } else {
+            tv.setText(file.getName());
+        }
         tv.setGravity(Gravity.CENTER);
         tv.setPadding(0, dp5, 0, dp5);
         tv.setTextColor(textColor);
@@ -155,7 +167,8 @@ public class FileActivity extends BaseActivity {
             public void onClick(View view) {
                 File tvFile = (File) tv.getTag();
                 if (!tvFile.equals(files.get(files.size() - 1))) {
-                    renderUI(tvFile, true);
+                    renderUI(tvFile);
+                    files.add(tvFile);
                 }
             }
         });
@@ -164,6 +177,7 @@ public class FileActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(ShowNewFileEvent event) {
-        renderUI(event.getFile(), true);
+        renderUI(event.getFile());
+        files.add(event.getFile());
     }
 }

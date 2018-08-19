@@ -52,6 +52,7 @@ public abstract class BaseRecyclerAdapter<T> extends
 
     public void setDataAndRefresh(List<T> data) {
         mData.clear();
+        checkData.clear();
         mData.addAll(data);
         notifyDataSetChanged();
         notifyItemRangeChanged(0, getItemCount());

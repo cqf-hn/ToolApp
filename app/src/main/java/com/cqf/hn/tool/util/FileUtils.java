@@ -9,6 +9,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 
+import static java.time.temporal.WeekFields.ISO;
+
 /**
  * @author cqf
  * @time 2018/8/19 0019  上午 12:53
@@ -35,6 +37,22 @@ public class FileUtils {
         add("wps");
         add("wpt");
         add("dot");
+    }};
+    private static final ArrayList<String> zipType = new ArrayList<String>() {{
+        add("rar");
+        add("zip");
+        add("7z");
+        add("cab");
+        add("arj");
+        add("lzh");
+        add("tar");
+        add("gz");
+        add("ace");
+        add("uue");
+        add("bz2");
+        add("jar");
+        add("iso");
+        add("mpq");
     }};
 
     public static boolean createFileByDeleteOldFile(final File file) {
@@ -70,7 +88,7 @@ public class FileUtils {
     @FileType
     String getFileType(String name) {
         if (name.lastIndexOf(".") != -1 && name.length() > name.lastIndexOf(".")) {
-            String type = name.substring(name.lastIndexOf(".")).toLowerCase();
+            String type = name.substring(name.lastIndexOf(".") + 1).toLowerCase();
             if ("txt".equals(type)) {
                 return FileType.TYPE_TXT;
             } else if ("mp3".equals(type)) {
@@ -81,6 +99,8 @@ public class FileUtils {
                 return FileType.TYPE_WORD;
             } else if (voiceType.contains(type)) {
                 return FileType.TYPE_VIDEO;
+            } else if (zipType.contains(type)) {
+                return FileType.TYPE_ZIP;
             }
         }
         return FileType.TYPE_UN_KNOW;
@@ -92,6 +112,7 @@ public class FileUtils {
             FileType.TYPE_TXT,
             FileType.TYPE_WORD,
             FileType.TYPE_PDF,
+            FileType.TYPE_ZIP,
             FileType.TYPE_UN_KNOW
     })
     @Retention(RetentionPolicy.SOURCE)
@@ -102,5 +123,6 @@ public class FileUtils {
         String TYPE_UN_KNOW = "un_know";//未知文件
         String TYPE_WORD = "word";//未知文件
         String TYPE_PDF = "pdf";//未知文件
+        String TYPE_ZIP = "zip";//未知文件
     }
 }

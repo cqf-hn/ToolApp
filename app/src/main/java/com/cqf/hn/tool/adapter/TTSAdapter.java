@@ -22,7 +22,7 @@ public class TTSAdapter extends BaseRecyclerAdapter<File> {
     }
 
     @Override
-    protected BaseRecyclerViewWrapper createViewWrapper(BaseActivity _activity, ViewGroup parent, int type) {
+    protected BaseRecyclerViewWrapper<File> createViewWrapper(BaseActivity _activity, ViewGroup parent, int type) {
         return new TTSWrapper(_activity, parent);
     }
 }

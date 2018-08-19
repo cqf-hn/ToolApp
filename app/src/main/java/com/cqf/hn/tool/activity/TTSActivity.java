@@ -1,5 +1,7 @@
 package com.cqf.hn.tool.activity;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -8,9 +10,14 @@ import com.cqf.hn.tool.R;
 import com.cqf.hn.tool.adapter.TTSAdapter;
 import com.cqf.hn.tool.base.BaseActivity;
 import com.cqf.hn.tool.base.HeaderAndFooterWrapper;
+import com.cqf.hn.tool.event.SelectFileEvent;
 import com.cqf.hn.tool.holder.TTSFootHolder;
+import com.cqf.hn.tool.util.EventBusUtil;
 import com.cqf.hn.tool.util.UIHelper;
 import com.cqf.hn.tool.view.TitleView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -27,6 +34,18 @@ public class TTSActivity extends BaseActivity {
     private TTSAdapter adapter;
     private HeaderAndFooterWrapper wrapper;
     private LinearLayoutManager manager;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBusUtil.register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBusUtil.unregister(this);
+    }
 
     @Override
     public void onLayoutBefore() {
@@ -55,5 +74,10 @@ public class TTSActivity extends BaseActivity {
         recyclerView.setLayoutManager(manager);
         recyclerView.setPadding(0, 0, 0, 0);
         recyclerView.setAdapter(wrapper);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(SelectFileEvent event) {
+        adapter.setDataAndRefresh(event.getData());
     }
 }

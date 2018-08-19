@@ -70,35 +70,40 @@ public class FileWrapper extends BaseRecyclerViewWrapper<File> {
     @Override
     public void bindData(int position) {
         file = getItem(position);
+        tvFileName.setText(file.getName());
         if (file.isDirectory()) {
             iv.setImageResource(R.mipmap.ic_file);
-            tvFileName.setText(file.getName());
             tvFileName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            llFileInfo.setSelected(false);
         } else {
             String fileName = file.getName();
             fileType = FileUtils.getFileType(fileName);
             if (FileUtils.FileType.TYPE_TXT.equals(fileType)) {
-                iv.setImageResource(R.mipmap.ic_file_txt);
-                if (adapter.hacContainsData(file)) {
+                if(adapter.hacContainsData(file)) {
                     tvFileName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.ic_file_checked, 0);
+                    llFileInfo.setSelected(true);
                 } else {
                     tvFileName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.ic_file_un_check, 0);
+                    llFileInfo.setSelected(false);
                 }
+            } else {
+                tvFileName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                llFileInfo.setSelected(false);
+            }
+            if (FileUtils.FileType.TYPE_TXT.equals(fileType)) {
+                iv.setImageResource(R.mipmap.ic_file_txt);
             } else if (FileUtils.FileType.TYPE_MUSIC.equals(fileType)) {
                 iv.setImageResource(R.mipmap.ic_file_mp3);
-                tvFileName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             } else if (FileUtils.FileType.TYPE_VIDEO.equals(fileType)) {
                 iv.setImageResource(R.mipmap.ic_file_video);
-                tvFileName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             } else if (FileUtils.FileType.TYPE_WORD.equals(fileType)) {
                 iv.setImageResource(R.mipmap.ic_file_word);
-                tvFileName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             } else if (FileUtils.FileType.TYPE_PDF.equals(fileType)) {
                 iv.setImageResource(R.mipmap.ic_file_pdf);
-                tvFileName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            } else if (FileUtils.FileType.TYPE_ZIP.equals(fileType)) {
+                iv.setImageResource(R.mipmap.ic_file_zip);
             } else {
                 iv.setImageResource(R.mipmap.ic_unknow_file);
-                tvFileName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
     }
@@ -117,7 +122,7 @@ public class FileWrapper extends BaseRecyclerViewWrapper<File> {
                         tvFileName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.ic_file_checked, 0);
                         llFileInfo.setSelected(true);
                     }
-                } else if(file.isDirectory()) {
+                } else if (file.isDirectory()) {
                     ShowNewFileEvent.getInstance().send(file);
                 }
                 break;
